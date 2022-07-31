@@ -1,9 +1,8 @@
-use std::collections::HashMap;
 use core::hash::Hash;
-use std::cmp::Eq;
+use std::cmp::{ PartialEq, Eq };
 
 
-trait Same: Eq + Hash {}
+pub trait Same: PartialEq + Eq + Hash {}
 
 
 #[derive(PartialEq, Eq, Hash)]
@@ -13,7 +12,7 @@ where T: Same
     pub row: u16,
     pub col: u16,
 
-    links: HashMap<&'a T, bool>,
+    links: Vec<&'a T>,
 
     pub top: Option<&'a T>,
     pub bottom: Option<&'a T>,
@@ -31,7 +30,7 @@ impl<'a, T: Same> Cell<'a, T> {
             row,
             col,
 
-            links: HashMap::new(),
+            links: Vec::new(),
 
             top: None,
             bottom: None,
@@ -41,11 +40,8 @@ impl<'a, T: Same> Cell<'a, T> {
     }
 
 
-    pub fn link_to(&mut self, cell: &'a mut T, bidirect: Option<bool>) {
-        self.links.insert(cell, true);
-        if bidirect.unwrap_or(true) {
-            cell.link_to(self, Some(false));
-        }
+    pub fn link_to(&mut self, cell: &'a mut T) {
+        self.links.push(cell);
     }
 
 
@@ -55,7 +51,7 @@ impl<'a, T: Same> Cell<'a, T> {
 
 
     pub fn is_linked_to(&self, cell: &T) -> bool {
-        self.links.contains_key(cell)
+        self.links.contains(&cell)
     }
 
 
