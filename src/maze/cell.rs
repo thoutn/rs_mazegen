@@ -68,3 +68,32 @@ impl<'a, T: Same> Cell<'a, T> {
     }
 
 }
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_link_to() {
+        let mut cell1 = Cell::new(2, 1);
+        let mut cell2 = Cell::new(2, 2);
+
+        cell1.link_to(&mut cell2);
+        cell2.link_to(&mut cell1); //cyclic type of infinite size
+
+        let cell = *cell1.links.get(0).unwrap();
+        assert_eq!(2, cell.row);
+    }
+
+    #[test]
+    fn test_right_left() {
+        let mut cell1 = Cell::new(2, 1);
+        let mut cell2 = Cell::new(2, 2);
+
+        cell1.right = Some(&cell2);
+        cell2.left = Some(&cell1); //cyclic type of infinite size
+
+        assert_eq!(1, (*cell2.left.unwrap()).col);
+    }
+}
