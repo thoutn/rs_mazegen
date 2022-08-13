@@ -3,8 +3,8 @@ use std::rc::{Rc, Weak};
 use std::cmp::{PartialEq, Eq};
 
 
-type CellWeakLink = Weak<RefCell<Cell>>;
-type CellStrongLink = Rc<RefCell<Cell>>;
+pub type CellWeakLink = Weak<RefCell<Cell>>;
+pub type CellStrongLink = Rc<RefCell<Cell>>;
 
 
 // #[derive(PartialEq, Eq)]
@@ -99,7 +99,7 @@ mod tests {
 
 
     #[test]
-    fn test_link_to() {
+    fn cell_link_to() {
         let cell1 = Rc::new(RefCell::new(Cell::new(2, 1)));
         let cell2 = Rc::new(RefCell::new(Cell::new(2, 2)));
 
@@ -114,7 +114,7 @@ mod tests {
 
 
     #[test]
-    fn test_is_not_linked_to() {
+    fn cell_is_not_linked_to() {
         let cell1 = Rc::new(RefCell::new(Cell::new(2, 1)));
         let cell2 = Rc::new(RefCell::new(Cell::new(2, 2)));
         let cell3 = Rc::new(RefCell::new(Cell::new(3, 1)));
@@ -127,7 +127,7 @@ mod tests {
 
 
     #[test]
-    fn test_right_left() {
+    fn cell_right_left() {
         let cell1 = Rc::new(RefCell::new(Cell::new(2, 1)));
         let cell2 = Rc::new(RefCell::new(Cell::new(2, 2)));
 
@@ -140,7 +140,7 @@ mod tests {
 
 
     #[test]
-    fn test_neighbours() {
+    fn cell_neighbours() {
         let cell1 = Rc::new(RefCell::new(Cell::new(2, 1)));
         let cell2 = Rc::new(RefCell::new(Cell::new(2, 2)));
         let cell3 = Rc::new(RefCell::new(Cell::new(3, 1)));
