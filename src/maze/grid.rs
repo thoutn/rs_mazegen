@@ -1,5 +1,6 @@
 use std::cell::RefCell;
 use std::rc::{Rc, Weak};
+use rand::{thread_rng, Rng};
 use crate::maze::cell;
 
 
@@ -41,7 +42,7 @@ impl Grid {
     fn configure_cells(&mut self) {
         for row in &self.cells {
             for cell in row.iter() {
-                let row_ = R efCell::borrow(cell.as_ref().unwrap()).row as i32;
+                let row_ = RefCell::borrow(cell.as_ref().unwrap()).row as i32;
                 let col_ = RefCell::borrow(cell.as_ref().unwrap()).col as i32;
 
                 RefCell::borrow_mut(cell.as_ref().unwrap()).top = self.create_neighbour(row_ - 1, col_);
@@ -61,6 +62,14 @@ impl Grid {
         None
     }
 
+
+    pub fn get_rand_cell(&self) -> cell::CellWeakLink {
+        let mut rng = thread_rng();
+        let row_ = rng.gen_range(0..self.height) as usize;
+        let col_ = rng.gen_range(0..self.width) as usize;
+
+        Rc::downgrade(&self.cells[row_][col_].as_ref().unwrap())
+    }
 }
 
 
@@ -126,6 +135,18 @@ mod tests {
         let border = &RefCell::borrow(&cell).bottom;
 
         assert_eq!(true, border.is_some());
+    }
+
+
+    #[test]
+    fn grid_rand_cell() {
+        let mut grid = Grid::new(5, 5);
+        grid.init_grid();
+
+        let rand_cell = &grid.get_rand_cell();
+        let row = (&*rand_cell.upgrade().unwrap()).borrow().row;
+
+        assert!(row < grid.height);
     }
 
 }
