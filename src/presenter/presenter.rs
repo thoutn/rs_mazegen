@@ -1,9 +1,9 @@
 use std::rc::{Rc, Weak};
-use rand::distributions::uniform::SampleBorrow;
+// use rand::distributions::uniform::SampleBorrow;
 use crate::maze::{cell, grid};
 
 
-pub fn print_to_console(grid: grid::Grid) {
+pub fn print_to_console(grid: &grid::Grid) {
     let corner: &'static str = "+";
     let body: &'static str = "    ";
     let rbndr_pass: &'static str = " "; // passage to right adjacent cell
@@ -60,12 +60,12 @@ mod tests {
     use super::*;
 
 
-    #[test]
+    // #[test]
     fn draw() {
         let mut grid = grid::Grid::new(5, 5);
         grid.init_grid();
 
-        print_to_console(grid);
+        print_to_console(&grid);
 
         assert!(true);
     }

@@ -43,7 +43,7 @@ impl Cell {
     }
 
 
-    pub fn link_to(&mut self, cell: CellWeakLink, _bidirect: Option<bool>) {
+    pub fn link_to(&mut self, cell: CellWeakLink) { //, _bidirect: Option<bool>) {
         self.links.push(Rc::downgrade(&cell.upgrade().unwrap()));
         // if _bidirect.unwrap_or(true) {
         //     let mut cell = (&*cell.upgrade().unwrap()).borrow_mut();
@@ -103,8 +103,8 @@ mod tests {
         let cell1 = Rc::new(RefCell::new(Cell::new(2, 1)));
         let cell2 = Rc::new(RefCell::new(Cell::new(2, 2)));
 
-        (&*cell1).borrow_mut().link_to(Rc::downgrade(&cell2), Some(true));
-        (&*cell2).borrow_mut().link_to(Rc::downgrade(&cell1), Some(true));
+        (&*cell1).borrow_mut().link_to(Rc::downgrade(&cell2)); //, Some(true));
+        (&*cell2).borrow_mut().link_to(Rc::downgrade(&cell1)); //, Some(true));
 
         // println!("{}", (&*cell1).borrow().row);
         // println!("{}", RefCell::borrow(&cell1).row);
@@ -119,8 +119,8 @@ mod tests {
         let cell2 = Rc::new(RefCell::new(Cell::new(2, 2)));
         let cell3 = Rc::new(RefCell::new(Cell::new(3, 1)));
 
-        (&*cell1).borrow_mut().link_to(Rc::downgrade(&cell2), Some(true));
-        (&*cell2).borrow_mut().link_to(Rc::downgrade(&cell1), Some(true));
+        (&*cell1).borrow_mut().link_to(Rc::downgrade(&cell2)); //, Some(true));
+        (&*cell2).borrow_mut().link_to(Rc::downgrade(&cell1)); //, Some(true));
 
         assert_eq!(false, (&*cell1).borrow().is_linked_to(Rc::downgrade(&cell3)));
     }
