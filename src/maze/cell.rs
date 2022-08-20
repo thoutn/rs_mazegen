@@ -7,7 +7,9 @@ pub type CellWeakLink = Weak<RefCell<Cell>>;
 pub type CellStrongLink = Rc<RefCell<Cell>>;
 
 
-// #[derive(PartialEq, Eq)]
+/*
+ * The Cell class used to represent a cell in the maze.
+ */
 pub struct Cell {
     pub row: u16,
     pub col: u16,
@@ -43,20 +45,25 @@ impl Cell {
     }
 
 
-    pub fn link_to(&mut self, cell: CellWeakLink) { //, _bidirect: Option<bool>) {
+    /*
+     * Creates a link to the specified adjacent cell.
+     */
+    pub fn link_to(&mut self, cell: CellWeakLink) {
         self.links.push(Rc::downgrade(&cell.upgrade().unwrap()));
-        // if _bidirect.unwrap_or(true) {
-        //     let mut cell = (&*cell.upgrade().unwrap()).borrow_mut();
-        //     cell.link_to(Rc::downgrade(&Rc::new(RefCell::new(&*self))), Some(false));
-        // }
     }
 
 
+    /*
+     * Checks if it is linked to any adjacent cell in the maze.
+     */
     pub fn has_linked_cells(&self) -> bool {
         !self.links.is_empty()
     }
 
 
+    /*
+     * Checks if it is linked to the specified cell.
+     */
     pub fn is_linked_to(&self, cell: CellWeakLink) -> bool {
         // self.links.contains(&cell) // PartialEq not implemented on Weak<RefCell<Cell>>
 
@@ -70,6 +77,9 @@ impl Cell {
     }
 
 
+    /*
+     * Returns a list of all adjacent neighbours.
+     */
     pub fn neighbours(&self) -> Vec<CellWeakLink> {
         let mut lst: Vec<CellWeakLink> = vec![];
 

@@ -1,4 +1,3 @@
-use std::borrow::BorrowMut;
 use std::cell::RefCell;
 use std::rc::Rc;
 use rand::{thread_rng, Rng, seq::SliceRandom};
@@ -21,6 +20,7 @@ pub fn build_maze(grid: &grid::Grid) {
                 let cell_ = Rc::clone(run.choose(&mut rng).as_ref().unwrap());
 
                 if (&*cell_).borrow().top.is_some() {
+                    // links cell to cell.top
                     {
                         let mut c = (&*cell_).borrow_mut();
                         let n = &c.top.as_ref().unwrap().upgrade().unwrap();
@@ -29,6 +29,8 @@ pub fn build_maze(grid: &grid::Grid) {
                         //     &(&*cell_).borrow().top.as_ref().unwrap().upgrade().unwrap()
                         // ));
                     }
+
+                    // calls the reverse 'link_to()' cell.top -> cell
                     RefCell::borrow_mut(
                         &(&*cell_).borrow().top.as_ref().unwrap().upgrade().unwrap()
                     ).link_to(Rc::downgrade(&cell_));
@@ -36,6 +38,7 @@ pub fn build_maze(grid: &grid::Grid) {
 
                 run.clear();
             } else {
+                // links cell to cell.right
                 {
                     let mut c = (&*cell).borrow_mut();
                     let n = &c.right.as_ref().unwrap().upgrade().unwrap();
@@ -45,6 +48,7 @@ pub fn build_maze(grid: &grid::Grid) {
                     //     ));
                 }
 
+                // calls the reverse 'link_to()' cell.right -> cell
                 RefCell::borrow_mut(
                     &(&*cell).borrow().right.as_ref().unwrap().upgrade().unwrap()
                 ).link_to(Rc::downgrade(&cell));
