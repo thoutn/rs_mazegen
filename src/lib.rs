@@ -6,7 +6,7 @@
 //!
 //! The generated maze can be saved as an image, and used to solve it manually or using
 //! an automated maze solver. The raw format of the maze is also available, and is intended
-//! to be used by the later.
+//! to be used for the latter.
 //!
 //! # Public API
 //!
